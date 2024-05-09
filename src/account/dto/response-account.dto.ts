@@ -63,7 +63,7 @@ export class ResponseAccountDto {
     balance,
     savedAmount,
     accountYield,
-    user,
+    userId,
   }: AccountEntity): ResponseAccountDto {
     return new ResponseAccountDto({
       id,
@@ -73,7 +73,7 @@ export class ResponseAccountDto {
       balance,
       savedAmount,
       accountYield,
-      userId: user.id,
+      userId,
     });
   }
 }

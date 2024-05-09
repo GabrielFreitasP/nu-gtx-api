@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { LoggerService } from '../commons/logger/logger.service';
+import { UserEntity } from '../user/entities/user.entity';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { ResponseAccountDto } from './dto/response-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
@@ -19,6 +20,8 @@ export class AccountService {
     private readonly logger: LoggerService,
     @InjectRepository(AccountEntity)
     private readonly repository: Repository<AccountEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   async create(
@@ -27,13 +30,21 @@ export class AccountService {
     try {
       this.logger.debug(`Criando conta '${createAccountDto.number}'.`);
 
-      let account = new AccountEntity(createAccountDto);
+      const { userId } = createAccountDto;
+      const user = await this.userRepository.findOneBy({ id: userId });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      let account = new AccountEntity({ ...createAccountDto, user });
       account = await this.repository.save(account);
 
       this.logger.info(`Conta '${account.number}' criada.`);
 
       return ResponseAccountDto.fromEntity(account);
     } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+
       if (error.code === '23505') {
         this.logger.warn(`Conta '${createAccountDto.number}' já existe.`);
         throw new ConflictException(

@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsCurrency,
-  IsNotEmpty,
-  IsNumberString,
-  IsOptional,
-  IsUUID,
-} from 'class-validator';
+import { IsNotEmpty, IsNumberString, IsUUID } from 'class-validator';
 
 import ApiSchema from '../../commons/decorators/api-schema.decorator';
 
@@ -31,18 +25,15 @@ export class CreateAccountDto {
 
   @ApiProperty({ description: 'Saldo inicial da conta', example: 1000.0 })
   @IsNotEmpty()
-  @IsCurrency()
   balance: number;
 
   @ApiProperty({ description: 'Dinheiro guardado na conta', example: 2000.0 })
-  @IsOptional()
-  @IsCurrency()
-  savedAmount: number | null;
+  @IsNotEmpty()
+  savedAmount: number;
 
   @ApiProperty({ description: 'Rendimentos da conta', example: 25.5 })
-  @IsOptional()
-  @IsCurrency()
-  accountYield: number | null;
+  @IsNotEmpty()
+  accountYield: number;
 
   @ApiProperty({ description: 'ID do usuário associado', example: 'uuid' })
   @IsNotEmpty()

@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -38,6 +39,9 @@ export class AccountEntity {
 
   @Column('decimal', { precision: 10, scale: 2 })
   accountYield: number;
+
+  @RelationId((account: AccountEntity) => account.user)
+  userId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.accounts)
   user: UserEntity;
