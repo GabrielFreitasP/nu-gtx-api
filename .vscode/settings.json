@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["nestjs", "Nubank", "ormconfig", "postgres", "typeorm"]
+  "cSpell.words": ["nestjs", "Nubank", "ormconfig", "postgres", "typeorm"],
+  "material-icon-theme.activeIconPack": "nest"
 }
